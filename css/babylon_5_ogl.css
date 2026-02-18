@@ -1,0 +1,128 @@
+.babylon-sheet {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f0f0f0;
+}
+
+.babylon-sheet .sheet-header {
+  padding: 5px 10px;
+  border-bottom: 1px solid #ccc;
+  background: #f0f0f0;
+}
+
+.babylon-sheet .sheet-body {
+  overflow-y: auto;  /* Scroll solo en body si hay mucho contenido */
+}
+
+.centrarVertical {
+  display: flex;
+  align-items: center;  /* Centra verticalmente */
+}
+
+.tamMini {
+  font-size:xx-small;
+}
+
+.superindice
+{
+   vertical-align: super;
+}
+
+.inputCaracteristica {
+  height: 40px;
+  padding: 0 12px;
+  text-align: center;
+}
+.inputCaracteristica[readonly] {
+  background-color: cornflowerblue;
+}
+
+.inputCaracteristica[type="number"] {
+  text-align: center !important;
+  
+}
+.inputCaracteristica[type="number"]::-webkit-outer-spin-button,
+.inputCaracteristica[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Estilo base clickeable */
+.clickable-char {
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  user-select: none;
+  font-weight: 500;
+}
+
+/* Hover: fondo + sombra */
+.clickable-char:hover {
+  background: cornflowerblue; 
+  box-shadow: 0 2px 8px rgba(0, 122, 204, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Click activo */
+.clickable-char:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Icono dados opcional */
+/*.clickable-char::after {
+  content: "🎲";
+  margin-left: 4px;
+  font-size: 0.8em;
+  opacity: 0.7;
+}*/
+
+/* Responsive texto */
+.clickable-char {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Fija altura tabs, evita reflow */
+.tab.skills {
+  overflow-y: auto !important;
+  height: 100% !important;
+  contain: layout style;
+}
+
+/* Checkboxes sin focus visual */
+.chkClick:focus {
+  outline: none;
+}
+
+.habs-scroll
+{
+    overflow-y: auto;
+  max-height: 100%;
+}
+
+/* Fila 1 (celdas 6..12), Fila 3 (20..26), Fila 5 (34..40)... */
+.habilidades-grid > div:nth-child(14n+6),
+.habilidades-grid > div:nth-child(14n+7),
+.habilidades-grid > div:nth-child(14n+8),
+.habilidades-grid > div:nth-child(14n+9),
+.habilidades-grid > div:nth-child(14n+10),
+.habilidades-grid > div:nth-child(14n+11),
+.habilidades-grid > div:nth-child(14n+12) {
+  background-color: rgba(100, 148, 237, 0.212);
+}
+
+/* Fila 2 (13..19), Fila 4 (27..33), Fila 6 (41..47)... */
+.habilidades-grid > div:nth-child(14n+13),
+.habilidades-grid > div:nth-child(14n+14),
+.habilidades-grid > div:nth-child(14n+15),
+.habilidades-grid > div:nth-child(14n+16),
+.habilidades-grid > div:nth-child(14n+17),
+.habilidades-grid > div:nth-child(14n+18),
+.habilidades-grid > div:nth-child(14n+19) {
+  background-color: whitesmoke;
+}

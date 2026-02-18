@@ -1,0 +1,14 @@
+  <div style="display:grid; gap:4px; width:460px;" class="habilidades-grid" >
+
+  <div style="grid-column:3;text-align:center; width:35px;" class="tamMini">Clase</div>
+  <div style="grid-column:4;text-align:center; width:35px;" class="tamMini">Carac</div>
+  <div style="grid-column:5;text-align:center; width:35px;" class="tamMini">Rng</div>
+  <div style="grid-column:6;text-align:center; width:35px;" class="tamMini">Misc.</div>
+  <div style="grid-column:7;text-align:center; width:35px;" class="tamMini">Total</div>
+
+      {{#each habilidades as |item id|}}
+        {{> "systems/babylon_5_ogl/html/PJ/habilidad_fila.hbs" item}}
+      {{/each}}
+
+</div>
+

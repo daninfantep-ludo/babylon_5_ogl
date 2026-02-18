@@ -1,0 +1,9 @@
+<div style="display:grid; gap:4px; width:250px;">
+  <div style="grid-column:2;text-align:center" class="tamMini">Valor</div>
+  <div style="grid-column:3;text-align:center" class="tamMini">Mod</div>
+  <div style="grid-column:4;text-align:center" class="tamMini">Valor T.</div>
+  <div style="grid-column:5;text-align:center" class="tamMini">Mod T.</div>
+      {{#each caracteristicas as |item id|}}
+        {{> "systems/babylon_5_ogl/html/PJ/caracteristica_fila.hbs" item}}
+      {{/each}}
+</div>

@@ -1,0 +1,34 @@
+{
+    "id": "babylon_5_ogl",
+    "title": "Babylon 5 OGL 2E",
+    "description": "Sistema para el OGL de Babylon que no está en ninguna parte",
+    "authors": [
+      {
+        "name": "Daniel Infante",
+        "discord": "daxos_ludocronicas",
+        "email": "daniel@ludocronicas.org",
+        "url": "https://ludocronicas.org",
+        "flags": {}
+      }
+    ],
+    "url": "https://github.com/daniel-infante-perez/babylon_5_ogl",
+    "version": "0.0.1",
+    "compatibility": {
+      "minimum": 12,
+      "verified": "12.343"
+    },
+    "esmodules": ["module/babylon_5_ogl.mjs"],
+    "styles": ["css/babylon_5_ogl.css"],
+    "languages": [
+      {            
+        "lang": "es",
+        "name": "Spanish",
+        "path": "lang/es.json"
+      }
+    ],
+    "packs": [],
+    "packFolders": [],
+    "manifest": "https://github.com/daniel-infante-perez/babylon_5_ogl/releases/latest/download/system.json",
+    "download": "https://github.com/daniel-infante-perez/babylon_5_ogl/archive/refs/tags/v0.0.1.zip"  
+}
+  

@@ -1,0 +1,62 @@
+{
+  "Actor": {
+    "types": ["PJ", "PNJ","Nave"],
+    "default": "PJ",
+    "PJ":
+    {
+      "nivel":1,
+      "max_hp":0,
+      "cur_hp":0,
+      "dano_noletal":0,
+      "dv_clase":0,
+      "dv_tam":0,
+      "dv_misc":0,
+      "dv_total":0,
+      "dv_flat":0
+    }
+  },
+  "Item": {
+    "types": ["item", "weapon", "habilidad","feat","caracteristica","raza","salvacion"],
+    "default": "item",
+    "raza":
+    {
+      "mod_fue":0,
+      "mod_des":0,
+      "mod_con":0,
+      "mod_int":0,
+      "mod_sab":0,
+      "mod_car":0,
+      "fav_class":""      
+    },
+    "caracteristica":
+    {
+        "abrevia":"",
+        "valor": 0,
+        "mod": 0,
+        "valor_tmp":0,
+        "mod_tmp":0        
+    },
+    "habilidad":
+    {
+      "descriptor":"",
+      "usa_descriptor":false,
+      "solo_entrenada":false,
+      "de_clase":false,
+      "caracteristica":"",
+      "mod_caracteristica":0,
+      "mod_rangos":0,
+      "mod_otros":0,
+      "pen_armadura":false,
+      "mod":0
+    },
+    "salvacion":
+    {
+       "caracteristica":""
+      ,"mod_clase":0
+      ,"mod_caracteristica":0
+      ,"mod_miscelaneo":0
+      ,"mod":0
+    }
+  }
+
+}

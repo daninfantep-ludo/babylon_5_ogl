@@ -1,0 +1,40 @@
+
+
+        <div style="grid-column:1;" class="centrarVertical">
+            <div class="carac-roll item clickable-char" data-item-id="{{_id}}" data-label="{{name}}">{{name}} [{{system.caracteristica}}]
+                {{#if system.solo_entrenada}}<span class="tamMini superindice">T</span>{{/if}}
+                {{#if system.pen_armadura}}<span class="tamMini superindice">*</span>{{/if}}
+            </div>
+        </div>
+        <div style="grid-column:2;" class="centrarVertical">
+            {{#if system.usa_descriptor}}
+            <div class="item" data-item-id="{{_id}}" data-field="system.descriptor">
+                <input class="change inputCaracteristica" type="text"  value="{{system.descriptor}}"/>
+            </div>
+            {{/if}}
+        </div>
+        <div style="grid-column:3; width:35px;"> <!-- ojo: en los check son data-target en los demás, al parecer data-field-->
+            <div class="item" data-item-id="{{_id}}" data-target="system.de_clase">
+                    <input type="checkbox" class="chkClick" name="system.de_clase" {{checked system.de_clase}}/>
+            </div>     
+        </div>
+        <div style="grid-column:4; width:35px;">       
+          <div class="item" data-item-id="{{_id}}" data-field="system.mod_caracteristica" >
+            <input class="change inputCaracteristica" type="number" readonly  value="{{system.mod_caracteristica}}"/>
+          </div>
+        </div>
+        <div style="grid-column:5; width:35px;">
+          <div  class="item" data-item-id="{{_id}}" data-field="system.mod_rangos" >
+            <input class="change inputCaracteristica" type="number"     value="{{system.mod_rangos}}"/>
+          </div>
+        </div>
+        <div   style="grid-column:6; width:35px;">
+          <div class="item" data-item-id="{{_id}}" data-field="system.mod_otros" >
+            <input class="change inputCaracteristica"  type="number"  value="{{system.mod_otros}}"/>
+          </div>
+        </div>
+        <div style="grid-column:7; width:35px;">
+          <div  class="item" data-item-id="{{_id}}" data-field="system.mod" >
+            <input class="change inputCaracteristica" type="number" readonly   value="{{system.mod}}"/>
+          </div>
+        </div>

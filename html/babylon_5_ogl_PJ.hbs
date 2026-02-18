@@ -1,0 +1,50 @@
+<form class="babylon-sheet">
+  <!-- Header fijo arriba -->
+  <header class="sheet-header flexrow" style="flex: none;">
+    <img class="profile-img" 
+         src="{{actor.img}}" 
+         title="{{actor.name}}" 
+         data-actor-id="{{actor.id}}"
+         data-edit='img'
+         width="200" height="200" 
+         style="flex: 0 0 50px; margin-right: 10px;"/>
+    
+    <div class="header-fields" style="flex: 1;">
+      <h1 class="charname editable" style="margin: 0; font-size: 1.2em;">
+        <input name="name" type="text" value="{{actor.name}}" placeholder="Nombre del personaje"/>
+      </h1>
+    </div>
+  </header>
+  <div style="display:grid; gap:4px;">
+    <div style=" grid-column:1;">
+      {{> "systems/babylon_5_ogl/html/PJ/caracteristicas.hbs"}}
+    </div>
+    
+    <div style="grid-column:2;">
+      <div>Otros datos</div>
+      {{> "systems/babylon_5_ogl/html/PJ/salvaciones.hbs"}}
+    </div>    
+  </div>
+  <!-- Contenido pegado arriba-izquierda -->
+  <div class="sheet-body" style="flex: 1; display: flex; flex-direction: column; padding: 10px; box-sizing: border-box;">
+    <div class="nav-header grid-header">
+
+        <nav class="sheet-tabs" style="border: 0px solid; " data-group="primary">
+            <span style="padding-left: 95px"></span>
+            <a class="item" data-tab="habilidades"><strong>Habilidades</strong></a>
+            <a class="item" data-tab="combate"><strong>Combate</strong></a>
+            <a class="item" data-tab="equipo"><strong>Equipo</strong></a>
+            <a class="item" data-tab="notas"><strong>Notas</strong></a>
+        </nav>
+    </div>
+
+ <section class="sheet-body" >
+     <div class="tab skills habs-scroll" data-group="primary" data-tab="habilidades">
+              {{> "systems/babylon_5_ogl/html/PJ/habilidades.hbs"}}                    
+     </div>
+ </section>
+ 
+
+   
+  </div>
+</form>

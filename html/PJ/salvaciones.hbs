@@ -1,0 +1,9 @@
+<div style="display:grid; gap:4px; width:250px;">
+  <div style="grid-column:2;text-align:center" class="tamMini">Clase</div>
+  <div style="grid-column:3;text-align:center" class="tamMini">Carac.</div>
+  <div style="grid-column:4;text-align:center" class="tamMini">Misc.</div>
+  <div style="grid-column:5;text-align:center" class="tamMini">Total</div>
+      {{#each salvaciones as |item id|}}
+        {{> "systems/babylon_5_ogl/html/PJ/salvacion_fila.hbs" item}}
+      {{/each}}
+</div>
