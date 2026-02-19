@@ -1,4 +1,4 @@
-export default class babylon_5_ogl_hojaItem extends foundry.applications.sheets.ItemSheetV2 {
+export default class babylon_5_ogl_hojaItem extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.sheets.ItemSheetV2) {
 
     static DEFAULT_OPTIONS = {
         classes: ["babylon_5_ogl", "sheet", "item"],

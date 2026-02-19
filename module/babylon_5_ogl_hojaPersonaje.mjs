@@ -1,4 +1,4 @@
-export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.sheets.ActorSheetV2 {
+export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.sheets.ActorSheetV2) {
     
     static DEFAULT_OPTIONS = {
         classes: ["babylon-", "sheet", "actor"],
