@@ -1,30 +1,33 @@
-export default class babylon_5_ogl_hojaItem extends ItemSheet{
+export default class babylon_5_ogl_hojaItem extends foundry.applications.sheets.ItemSheetV2 {
 
-    static get defaultOptions() {
-        return foundry.utils.mergeObject(super.defaultOptions, {
-          classes: ["babylon_5_ogl", "sheet", "item"]
-          ,tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "general" }]
-          ,width: 580
-          ,height: 500
-        });
-      }
+    static DEFAULT_OPTIONS = {
+        classes: ["babylon_5_ogl", "sheet", "item"],
+        position: {
+            width: 580,
+            height: 500
+        },
+        window: {
+            resizable: true
+        }
+    };
 
-    get template(){
-        const path = 'systems/babylon_5_ogl/html';
+    static PARTS = {
+        sheet: {
+            template: "systems/babylon_5_ogl/html/item_caracteristica_sheet.hbs"
+        }
+    };
+
+    async _prepareContext(options) {
+        const context = await super._prepareContext(options);
         
-        return path + '/item_' + this.item.type +'_sheet.hbs';
-    }
-    getData()
-    {
-        const data = super.getData();
-//        data.config = CONFIG.ad6_robotech;
         // Use a safe clone of the item data for further operations.
         const itemData = this.document.toObject(false);
 
-        data.system = itemData.system;
-        data.flags = itemData.flags;
-
-        return data;
+        context.system = itemData.system;
+        context.flags = itemData.flags;
+        context.document = this.document;
+        
+        return context;
     }
 
     getItemOnItemId(event)
@@ -32,9 +35,8 @@ export default class babylon_5_ogl_hojaItem extends ItemSheet{
         event.preventDefault();
         let element = event.currentTarget;
         let itemId = element.closest(".item").dataset.itemId;
-        let item = this.actor.items.get(itemId);
+        let item = this.document.items.get(itemId);
         return item;
     }
-
 
 }

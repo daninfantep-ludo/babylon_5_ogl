@@ -1,61 +1,95 @@
-export default class babylon_5_ogl_hojaPersonaje extends ActorSheet{
+export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.sheets.ActorSheetV2 {
     
-    static get defaultOptions() {
-  
+    static DEFAULT_OPTIONS = {
+        classes: ["babylon-", "sheet", "actor"],
+        position: {
+            width: 890,
+            height: 890
+        },
+        actions: {
+            rollCarac: this.prototype._onRollCarac,
+            chkClick: this.prototype._chkClick,
+            textChange: this.prototype._onTextChange
+        },
+        window: {
+            resizable: true
+        },
+        form: {
+            closeOnSubmit: false,
+            submitOnChange: true
+        }
+    };
+
+    static PARTS = {
+        sheet: {
+            template: "systems/babylon_5_ogl/html/babylon_5_ogl_PJ.hbs",
+            scrollable: [".habs-scroll"]
+        }
+    };
+
+    // Get the correct template path based on actor type
+    _getPartTemplate(partId) {
+        if (partId === "sheet") {
+            const templatePath = `systems/babylon_5_ogl/html/babylon_5_ogl_${this.document.type}.hbs`;
+            console.log("Loading template:", templatePath);
+            return templatePath;
+        }
+        return super._getPartTemplate(partId);
+    }
+
+    async _prepareContext(options) {
+        const context = await super._prepareContext(options);
         
-        return foundry.utils.mergeObject(super.defaultOptions, {
-          classes: ["babylon-", "sheet", "actor"],
-          template: "systems/babylon_5_ogl/html/babylon_5_ogl_PJ.hbs",
-          width: 890,
-          height: 890,                    
-          scrollY:[".habs-scroll"],
-          tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "skills" }]
+        // Set window height based on actor type
+        switch(this.document.type) {
+            case "PJ": 
+                this.options.position.height = 890; 
+                break;
+            case "PNJ": 
+                this.options.position.height = 550; 
+                break;
+            case "Nave": 
+                this.options.position.height = 620; 
+                break;
+            default: 
+                this.options.position.height = 890;
+        }
+        
+        return context;
+    }
+
+    async _preparePartContext(partId, context, options) {
+        context = await super._preparePartContext(partId, context, options);
+        
+        // Prepare context for the sheet part
+        if (partId === "sheet") {
+            context.config = CONFIG.babylon_5_ogl;
+            context.system = this.document.system;
+            context.caracteristicas = this.document.items.filter(item => item.type === "caracteristica");
+            context.habilidades = this.document.items.filter(item => item.type === "habilidad");
+            context.salvaciones = this.document.items.filter(item => item.type === "salvacion");
+            context.type = this.document.type;
+            context.flags = this.document.flags;
+        }
+        
+        return context;
+    }
+
+    _onRender(context, options) {
+        super._onRender(context, options);
+        
+        // Add event listeners
+        this.element.querySelectorAll(".change").forEach(el => {
+            el.addEventListener("change", this._onTextChange.bind(this));
         });
         
-
-    }
-
-    get template(){
-        switch(this.actor.type)
-        {
-            case "PJ": this.position.height = 890; break;
-            case "PNJ": this.position.height = 550; break;
-            case "Nave": this.position.height = 620; break;
-            default: this.position.height=890;
-        }
-
-        const path = 'systems/babylon_5_ogl/html';
-        return path + '/babylon_5_ogl_' + this.actor.type +'.hbs';
-    }
-
-
-    getData()
-    {
-        const data = super.getData();
-        data.config = CONFIG.babylon_5_ogl;
-
-
-        data.system = this.actor.system;
-        data.caracteristicas = this.actor.items.filter(function(item){return item.type=="caracteristica"});
-        data.habilidades = this.actor.items.filter(function(item){return item.type=="habilidad"});
-        data.salvaciones = this.actor.items.filter(function(item){return item.type=="salvacion"});
-
-        data.type = this.actor.type;
-        data.flags = this.actor.flags;
-
-
-        return data;
-       
+        this.element.querySelectorAll(".carac-roll").forEach(el => {
+            el.addEventListener("click", this._onRollCarac.bind(this));
+        });
         
-    }
-
-    activateListeners(html)
-    {
-        super.activateListeners(html);
-        html.find(".change").change(this._onTextChange.bind(this));     
-        html.find(".carac-roll").click(this._onRollCarac.bind(this));    
-        html.find(".chkClick").click(this._chkClick.bind(this));   
-
+        this.element.querySelectorAll(".chkClick").forEach(el => {
+            el.addEventListener("click", this._chkClick.bind(this));
+        });
     }
 
     _chkClick(event)
@@ -64,7 +98,7 @@ export default class babylon_5_ogl_hojaPersonaje extends ActorSheet{
         let element = event.currentTarget;
         let itemId = element.closest(".item").dataset.itemId;
         let target = element.closest(".item").dataset.target;
-        let item = this.actor.items.get(itemId);
+        let item = this.document.items.get(itemId);
 
         if(target=="system.de_clase"){
             item.update({"system.de_clase":!item.system.de_clase});
@@ -78,7 +112,7 @@ export default class babylon_5_ogl_hojaPersonaje extends ActorSheet{
 
         // ojo: es acá, cuando cambie un valor temporal, que se deba recalcular el modificador y todos los modificadores de habilidad
         // de las habilidades correspondientes
-        const skillsTab = this.element.find('.tab[data-tab="habilidades"]')[0];
+        const skillsTab = this.element.querySelector('.tab[data-tab="habilidades"]');
         const scrollPos = skillsTab ? skillsTab.scrollTop : 0;
 
 
@@ -103,7 +137,7 @@ export default class babylon_5_ogl_hojaPersonaje extends ActorSheet{
                     case "system.valor_tmp":
                         item.update({"system.valor_tmp":event.target.value}); 
                         await item.update({"system.mod_tmp":this.abilityModifier(event.target.value)}); 
-                        updated = this.actor.items.get(item.id);
+                        updated = this.document.items.get(item.id);
                         this.actualizarSalvaciones(updated);
                         this.actualizarHabilidades(updated);
                         break;
@@ -119,7 +153,7 @@ export default class babylon_5_ogl_hojaPersonaje extends ActorSheet{
                         await item.update({"system.mod_miscelaneo":parseInt(event.target.value) ||0});
                     break; 
                 }
-                updated = this.actor.items.get(item.id);
+                updated = this.document.items.get(item.id);
                 await updated.update({"system.mod":this.sumarSalvacion(updated)});
                 break;
             case "habilidad":
@@ -139,7 +173,7 @@ export default class babylon_5_ogl_hojaPersonaje extends ActorSheet{
                     await item.update({"system.descriptor":event.target.value});
                     break
                 }
-                    updated = this.actor.items.get(item.id);
+                    updated = this.document.items.get(item.id);
                     await updated.update({"system.mod":this.sumarHabilidad(updated)});
                 break;
         }
@@ -151,14 +185,14 @@ export default class babylon_5_ogl_hojaPersonaje extends ActorSheet{
 
     async actualizarHabilidades(item)
     {
-        let habilidades = this.actor.items.filter(function(item){return (item.type=="habilidad")});
+        let habilidades = this.document.items.filter(function(item){return (item.type=="habilidad")});
         
         for(const hab of habilidades)
         {   
             if(hab.system.caracteristica == item.system.abrevia)
             {
                 await hab.update({"system.mod_caracteristica":parseInt(item.system.mod_tmp)});
-                let updated = this.actor.items.get(hab.id);
+                let updated = this.document.items.get(hab.id);
                 await updated.update({"system.mod":this.sumarHabilidad(updated)});
             }
         }
@@ -172,14 +206,14 @@ export default class babylon_5_ogl_hojaPersonaje extends ActorSheet{
 
     async actualizarSalvaciones(item)
     {
-        let salvaciones = this.actor.items.filter(function(item){return (item.type=="salvacion")});
+        let salvaciones = this.document.items.filter(function(item){return (item.type=="salvacion")});
         
         for(const salva of salvaciones)
         {   
             if(salva.system.caracteristica == item.system.abrevia)
             {
                 await salva.update({"system.mod_caracteristica":parseInt(item.system.mod_tmp)});
-                let updated = this.actor.items.get(salva.id);
+                let updated = this.document.items.get(salva.id);
                 await updated.update({"system.mod":this.sumarSalvacion(updated)});
             }
         }
@@ -198,7 +232,7 @@ export default class babylon_5_ogl_hojaPersonaje extends ActorSheet{
         let element = event.currentTarget;
         let itemId = element.closest(".item").dataset.itemId;
         let item = null;
-        item = this.actor.items.get(itemId);
+        item = this.document.items.get(itemId);
         return item;
     }
 
@@ -215,7 +249,7 @@ export default class babylon_5_ogl_hojaPersonaje extends ActorSheet{
 
         const element = event.currentTarget.closest(".item");
         const itemId = element.dataset.itemId;
-        const item = this.actor.items.get(itemId);
+        const item = this.document.items.get(itemId);
         
         if (!item) return;
 
@@ -243,7 +277,7 @@ export default class babylon_5_ogl_hojaPersonaje extends ActorSheet{
         await roll.evaluate();  // ← Solo esto
 
         // Chat message
-        const speaker = ChatMessage.getSpeaker({ actor: this.actor });
+        const speaker = ChatMessage.getSpeaker({ actor: this.document });
         await ChatMessage.create({
             speaker,
             flavor: `Prueba de ${label}`,

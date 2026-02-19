@@ -7,7 +7,7 @@ import babylon_5_ogl_hojaItem from './babylon_5_ogl_hojaItem.mjs';
 Hooks.on("createActor", async (actor, options, userId) => {
   // Solo para actores de tipo "character", por ejemplo
   if (actor.type !== "PJ") return;
-
+  console.log(actor);
   // Lista de características de la hoja para un PJ
 
   const CARACTERISTICAS = [
@@ -83,10 +83,10 @@ Hooks.once("init", function(){
   
 
     Items.unregisterSheet("core", ItemSheet);
-    Items.registerSheet("ad6_robotech",babylon_5_ogl_hojaItem,{ makeDefalut: true});
+    Items.registerSheet("babylon_5_ogl",babylon_5_ogl_hojaItem,{ makeDefault: true});
 
     Actors.unregisterSheet("core", ActorSheet);
-    Actors.registerSheet("babylon_5_ogl",babylon_5_ogl_hojaPersonaje,{ makeDefalut: true});
+    Actors.registerSheet("babylon_5_ogl",babylon_5_ogl_hojaPersonaje,{ makeDefault: true});
 
     preloadHandlebarsTemplates();
 });
@@ -95,8 +95,12 @@ Hooks.once("init", function(){
 // Función para cargar los html parciales de cada cosa de la hoja y demases
     async function preloadHandlebarsTemplates() {
         return loadTemplates([
+        // Main actor sheets
+        'systems/babylon_5_ogl/html/babylon_5_ogl_PJ.hbs'
+        ,'systems/babylon_5_ogl/html/babylon_5_ogl_PNJ.hbs'
+        ,'systems/babylon_5_ogl/html/babylon_5_ogl_Nave.hbs'
         // Actor partials.
-        'systems/babylon_5_ogl/html/PJ/caracteristicas.hbs'
+        ,'systems/babylon_5_ogl/html/PJ/caracteristicas.hbs'
         ,'systems/babylon_5_ogl/html/PJ/caracteristica_fila.hbs'
         ,'systems/babylon_5_ogl/html/PJ/habilidades.hbs'
         ,'systems/babylon_5_ogl/html/PJ/habilidad_fila.hbs'

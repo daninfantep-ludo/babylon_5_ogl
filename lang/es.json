@@ -1,4 +1,14 @@
 {
+    "TYPES.Actor.PJ": "Personaje Jugador",
+    "TYPES.Actor.PNJ": "Personaje No-Jugador",
+    "TYPES.Actor.Nave": "Nave",
+    "TYPES.Item.item": "Objeto",
+    "TYPES.Item.weapon": "Arma",
+    "TYPES.Item.habilidad": "Habilidad",
+    "TYPES.Item.feat": "Hazaña",
+    "TYPES.Item.caracteristica": "Característica",
+    "TYPES.Item.raza": "Raza",
+    "TYPES.Item.salvacion": "Salvación",
     "babylon_5_ogl":
     {
         "phase":{
