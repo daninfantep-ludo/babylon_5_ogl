@@ -1,18 +1,23 @@
 <div class="babylon-sheet">
   <!-- Header fijo arriba -->
-  <header class="sheet-header flexrow" style="flex: none;">
-    <img class="profile-img" 
-         src="{{document.img}}" 
-         title="{{document.name}}" 
-         data-actor-id="{{document.id}}"
-         data-edit='img'
-         width="200" height="200" 
-         style="flex: 0 0 50px; margin-right: 10px;"/>
+  <header class="sheet-header flexrow" style="flex: none; align-items: flex-start;">
+    <div style="position: relative; flex: 0 0 80px; margin-right: 10px;">
+      <img class="profile-img" 
+           src="{{document.img}}" 
+           title="{{document.name}} (Click to change)" 
+           data-actor-id="{{document.id}}"
+           data-action="editPortrait"
+           width="80" height="80" 
+           style="display: block; border: 1px solid #ccc; border-radius: 4px;"/>
+      
+    </div>
     
-    <div class="header-fields" style="flex: 1;">
-      <h1 class="charname editable" style="margin: 0; font-size: 1.2em;">
-        <input name="name" type="text" value="{{document.name}}" placeholder="Nombre del personaje"/>
-      </h1>
+    <div class="header-fields" style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start; padding: 0;">      
+      <input name="name" type="text" value="{{document.name}}" placeholder="Nombre del personaje" style="font-size: 1em; padding: 4px; margin: 0; margin-bottom: 4px;"/>
+      <div style="display: flex; gap: 16px;">
+        {{> "systems/babylon_5_ogl/html/PJ/clases.hbs"}}
+        {{> "systems/babylon_5_ogl/html/PJ/razas.hbs"}}
+      </div>
     </div>
   </header>
   <div style="display:grid; gap:4px;">
@@ -22,40 +27,30 @@
     </div>
     
     <div style="grid-column:2;">
-      <div>Otros datos</div>
       {{> "systems/babylon_5_ogl/html/PJ/salvaciones.hbs"}}
     </div>    
   </div>
 
   <!-- Contenido pegado arriba-izquierda -->
   <div class="sheet-body" style="flex: 1; display: flex; flex-direction: column; padding: 10px; box-sizing: border-box;">
-    <div class="nav-header grid-header">
+    <nav class="sheet-tabs" data-group="primary" style="border-bottom: 1px solid #444; margin-bottom: 10px;">
+      <a class="item" data-tab="habilidades"><strong>Habilidades</strong></a>
+      <a class="item" data-tab="combate"><strong>Combate</strong></a>
+      <a class="item" data-tab="equipo"><strong>Equipo</strong></a>
+      <a class="item" data-tab="notas"><strong>Notas</strong></a>
+    </nav>
 
-        <nav class="sheet-tabs" style="border: 0px solid; " data-group="primary">
-            <span style="padding-left: 95px"></span>
-            <a class="item" data-tab="habilidades"><strong>Habilidades</strong></a>
-            <a class="item" data-tab="combate"><strong>Combate</strong></a>
-            <a class="item" data-tab="equipo"><strong>Equipo</strong></a>
-            <a class="item" data-tab="notas"><strong>Notas</strong></a>
-        </nav>
+    <div class="tab skills habs-scroll" data-group="primary" data-tab="habilidades" style="flex: 1; overflow-y: auto;">
+      {{> "systems/babylon_5_ogl/html/PJ/habilidades.hbs"}}                    
     </div>
-
- <section class="sheet-body" >
-     <div class="tab skills habs-scroll" data-group="primary" data-tab="habilidades">
-              {{> "systems/babylon_5_ogl/html/PJ/habilidades.hbs"}}                    
-     </div>
-     <div class="tab" data-group="primary" data-tab="combate">
-       <h3>Combate</h3>
-     </div>
-     <div class="tab" data-group="primary" data-tab="equipo">
-       <h3>Equipo</h3>
-     </div>
-     <div class="tab" data-group="primary" data-tab="notas">
-       <h3>Notas</h3>
-     </div>
- </section>
- 
-
-   
+    <div class="tab" data-group="primary" data-tab="combate" style="flex: 1; overflow-y: auto;">
+      <h3>Combate</h3>
+    </div>
+    <div class="tab" data-group="primary" data-tab="equipo" style="flex: 1; overflow-y: auto;">
+      <h3>Equipo</h3>
+    </div>
+    <div class="tab" data-group="primary" data-tab="notas" style="flex: 1; overflow-y: auto;">
+      <h3>Notas</h3>
+    </div>
   </div>
 </div>

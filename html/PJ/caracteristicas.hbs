@@ -1,8 +1,9 @@
-<div style="display:grid; gap:4px; width:250px;">
-  <div style="grid-column:2;text-align:center" class="tamMini">Valor</div>
-  <div style="grid-column:3;text-align:center" class="tamMini">Mod</div>
-  <div style="grid-column:4;text-align:center" class="tamMini">Valor T.</div>
-  <div style="grid-column:5;text-align:center" class="tamMini">Mod T.</div>
+<div style="display:grid; gap:2px; width:250px; grid-template-columns: auto repeat(4, 1fr);">
+  <div style="grid-column:1;"></div>
+  <div class="tamMini">Valor</div>
+  <div class="tamMini">Mod</div>
+  <div class="tamMini"  style=" margin-left: 5px;">Valor&nbsp;T.</div>
+  <div class="tamMini">Mod T.</div>
       {{#each caracteristicas as |item id|}}
         {{> "systems/babylon_5_ogl/html/PJ/caracteristica_fila.hbs" item}}
       {{/each}}

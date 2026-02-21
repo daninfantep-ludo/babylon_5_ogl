@@ -2,13 +2,41 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #f0f0f0;
+  background: #2a2a2a;
+  color: #e0e0e0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .babylon-sheet .sheet-header {
-  padding: 5px 10px;
-  border-bottom: 1px solid #ccc;
-  background: #f0f0f0;
+  padding: 8px 10px;
+  border-bottom: 1px solid #444;
+  background: #1a1a1a;
+  height: auto;
+  min-height: 80px;
+}
+
+.babylon-sheet .sheet-header input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #555;
+  border-radius: 3px;
+  font-size: 1em;
+  background: #3a3a3a;
+  color: #e0e0e0;
+}
+
+/* Portrait image - clickable to change */
+.profile-img {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 1;
+}
+
+.profile-img:hover {
+  opacity: 0.8;
+  box-shadow: 0 0 12px rgba(0, 120, 212, 0.6);
 }
 
 .babylon-sheet .sheet-body {
@@ -21,7 +49,13 @@
 }
 
 .tamMini {
-  font-size:xx-small;
+  font-size: 10px;
+  font-weight: 600;
+  color: #1a1a1a;
+  background-color: #888;
+  padding: 2px 4px;
+  text-align: center;
+  border-radius: 2px;
 }
 
 .superindice
@@ -30,12 +64,17 @@
 }
 
 .inputCaracteristica {
-  height: 40px;
-  padding: 0 12px;
+  height: 24px;
+  padding: 2px 6px;
   text-align: center;
+  font-size: 12px;
+  background-color: #3a3a3a;
+  color: #e0e0e0;
+  border: 1px solid #555;
 }
 .inputCaracteristica[readonly] {
-  background-color: cornflowerblue;
+  background-color: #0078d4;
+  color: white;
 }
 
 .inputCaracteristica[type="number"] {
@@ -56,11 +95,15 @@
   transition: all 0.2s ease;
   user-select: none;
   font-weight: 500;
+  background-color: transparent;
+  color: #e0e0e0;
+  border: none;
 }
 
 /* Hover: fondo + sombra */
 .clickable-char:hover {
-  background: cornflowerblue; 
+  background: #0078d4;
+  color: white;
   box-shadow: 0 2px 8px rgba(0, 122, 204, 0.3);
   transform: translateY(-1px);
 }
@@ -81,10 +124,10 @@
 
 /* Responsive texto */
 .clickable-char {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  word-wrap: break-word;
 }
 
 /* Fija altura tabs, evita reflow */
@@ -92,6 +135,41 @@
   overflow-y: auto !important;
   height: 100% !important;
   contain: layout style;
+}
+
+/* Tab styling */
+.sheet-tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.sheet-tabs .item {
+  padding: 8px 12px;
+  background: #3a3a3a;
+  border: 1px solid #555;
+  border-radius: 4px 4px 0 0;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sheet-tabs .item:hover {
+  background: #4a4a4a;
+  color: #ccc;
+}
+
+.sheet-tabs .item.active {
+  background: #0078d4;
+  color: white;
+  border-color: #0078d4;
+}
+
+.tab {
+  display: none !important;
+}
+
+.tab.active {
+  display: block !important;
 }
 
 /* Checkboxes sin focus visual */
@@ -113,7 +191,7 @@
 .habilidades-grid > div:nth-child(14n+10),
 .habilidades-grid > div:nth-child(14n+11),
 .habilidades-grid > div:nth-child(14n+12) {
-  background-color: rgba(100, 148, 237, 0.212);
+  background-color: #3a3a3a;
 }
 
 /* Fila 2 (13..19), Fila 4 (27..33), Fila 6 (41..47)... */
@@ -124,5 +202,201 @@
 .habilidades-grid > div:nth-child(14n+17),
 .habilidades-grid > div:nth-child(14n+18),
 .habilidades-grid > div:nth-child(14n+19) {
-  background-color: whitesmoke;
+  background-color: #2a2a2a;
+}
+/* Classes Section Styling */
+.clases-section {
+  margin-top: 6px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.clases-header {
+  font-size: 11px;
+  font-weight: bold;
+  color: #0078d4;
+  margin: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+}
+
+.clases-list {
+  display: flex;
+  gap: 12px;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.clase-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: transparent;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  height: 22px;
+}
+
+.clase-nombre {
+  font-size: 11px;
+  font-weight: 600;
+  color: #e0e0e0;
+  min-width: auto;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.sin-clases {
+  font-size: 11px;
+  color: #888;
+  font-style: italic;
+}
+
+.clase-nivel {
+  width: 30px;
+  height: 20px;
+  padding: 2px 4px;
+  font-size: 10px;
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  border-radius: 2px;
+  text-align: center;
+}
+
+.clase-nivel:hover,
+.clase-nivel:focus {
+  border-color: #0078d4;
+  box-shadow: 0 0 4px rgba(0, 120, 212, 0.4);
+  outline: none;
+}
+
+/* Ensure wrapper divs are centered */
+.clase-item .item[data-field] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+button[data-action="removeClass"] {
+  padding: 1px 4px;
+  font-size: 9px;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+button[data-action="removeClass"]:hover {
+  background: #e53935;
+  box-shadow: 0 2px 6px rgba(211, 47, 47, 0.4);
+}
+
+button[data-action="removeClass"]:active {
+  background: #b71c1c;
+}
+
+/* Races Section Styling */
+.razas-section {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.razas-header {
+  font-size: 11px;
+  font-weight: bold;
+  color: #0078d4;
+  margin: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+}
+
+.razas-list {
+  display: flex;
+  gap: 12px;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.raza-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: transparent;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  height: 22px;
+}
+
+.raza-nombre {
+  font-size: 11px;
+  font-weight: 600;
+  color: #e0e0e0;
+  min-width: auto;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.sin-raza {
+  font-size: 11px;
+  color: #888;
+  font-style: italic;
+}
+
+button[data-action="removeRaza"] {
+  padding: 1px 4px;
+  font-size: 9px;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+button[data-action="removeRaza"]:hover {
+  background: #e53935;
+  box-shadow: 0 2px 6px rgba(211, 47, 47, 0.4);
+}
+
+button[data-action="removeRaza"]:active {
+  background: #b71c1c;
 }

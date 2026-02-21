@@ -1,5 +1,5 @@
         <div style="grid-column:1;" class="centrarVertical">
-            <div class="carac-roll item clickable-char" data-item-id="{{_id}}" data-label="{{name}}">{{name}}</div>
+            <div data-action="rollCarac" class="carac-roll item clickable-char" data-item-id="{{_id}}" data-label="{{name}}" style="font-size: 11px; padding: 2px 4px;">{{name}}</div>
         </div>
         <div style="grid-column:2;">
           <div class="item" data-item-id="{{_id}}" data-field="system.mod_clase" >
@@ -11,7 +11,7 @@
             <input class="change inputCaracteristica" type="number" readonly  readonly  value="{{system.mod_caracteristica}}"/>
           </div>
         </div>
-        <div   style="grid-column:4;">
+        <div   style="grid-column:4;  margin-left: 4px;">
           <div class="item" data-item-id="{{_id}}" data-field="system.mod_miscelaneo" >
             <input class="change inputCaracteristica"  type="number"  value="{{system.mod_miscelaneo}}"/>
           </div>

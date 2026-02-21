@@ -7,12 +7,15 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
             height: 890
         },
         actions: {
-            rollCarac: this.prototype._onRollCarac,
-            chkClick: this.prototype._chkClick,
-            textChange: this.prototype._onTextChange
+            rollCarac: babylon_5_ogl_hojaPersonaje.prototype._onRollCarac,
+            chkClick: babylon_5_ogl_hojaPersonaje.prototype._chkClick,
+            editPortrait: babylon_5_ogl_hojaPersonaje.prototype._onEditPortrait,
+            removeClass: babylon_5_ogl_hojaPersonaje.prototype._onRemoveClass,
+            removeRaza: babylon_5_ogl_hojaPersonaje.prototype._onRemoveRaza
         },
         window: {
-            resizable: true
+            resizable: true,
+            frame: true
         },
         form: {
             closeOnSubmit: false,
@@ -65,9 +68,31 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
         if (partId === "sheet") {
             context.config = CONFIG.babylon_5_ogl;
             context.system = this.document.system;
-            context.caracteristicas = this.document.items.filter(item => item.type === "caracteristica");
-            context.habilidades = this.document.items.filter(item => item.type === "habilidad");
-            context.salvaciones = this.document.items.filter(item => item.type === "salvacion");
+            
+            // Filter and sort caracteristicas in the order declared in createActor hook
+            const caracOrder = ["FUE", "DES", "CON", "INT", "SAB", "CAR"];
+            context.caracteristicas = this.document.items
+                .filter(item => item.type === "Característica")
+                .sort((a, b) => caracOrder.indexOf(a.system.abrevia) - caracOrder.indexOf(b.system.abrevia));
+            
+            context.habilidades = this.document.items.filter(item => item.type === "Habilidad");
+            
+            // Sort salvaciones in the order declared in createActor hook
+            const salvOrder = ["CON", "DES", "SAB"];
+            context.salvaciones = this.document.items
+                .filter(item => item.type === "Salvación")
+                .sort((a, b) => salvOrder.indexOf(a.system.caracteristica) - salvOrder.indexOf(b.system.caracteristica));
+            
+            // Get classes (Clase items)
+            context.clases = this.document.items.filter(item => item.type === "Clase");
+            
+            // Calculate ECL (Effective Class Level) as sum of all clase niveles
+            context.ecl = context.clases.reduce((total, clase) => total + (parseInt(clase.system.nivel) || 0), 0);
+            
+            // Get race (Raza item) - typically only one
+            const razaItems = this.document.items.filter(item => item.type === "Raza");
+            context.razas = razaItems.length > 0 ? razaItems[0] : null;
+            
             context.type = this.document.type;
             context.flags = this.document.flags;
         }
@@ -82,14 +107,12 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
         this.element.querySelectorAll(".change").forEach(el => {
             el.addEventListener("change", this._onTextChange.bind(this));
         });
-        
-        this.element.querySelectorAll(".carac-roll").forEach(el => {
-            el.addEventListener("click", this._onRollCarac.bind(this));
-        });
-        
+
+        /*
         this.element.querySelectorAll(".chkClick").forEach(el => {
             el.addEventListener("click", this._chkClick.bind(this));
-        });
+        });*/
+        // Redundante porque se usa el actions de las default options para las interacciones de click
     }
 
     _chkClick(event)
@@ -112,22 +135,21 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
 
         // ojo: es acá, cuando cambie un valor temporal, que se deba recalcular el modificador y todos los modificadores de habilidad
         // de las habilidades correspondientes
+        
         const skillsTab = this.element.querySelector('.tab[data-tab="habilidades"]');
         const scrollPos = skillsTab ? skillsTab.scrollTop : 0;
 
-
         let item = this.getItemOnItemId(event);
+        
         let element = event.currentTarget;
         let field = element.closest(".item").dataset.field;   
+        
         let updated = null;
-        console.log(element.closest(".item").dataset);
-        console.log("-",element);
-        console.log("-",event.target.value);
-        console.log("-",field);
-        console.log("-",item.type);
+
+
         switch(item.type)
         {
-            case "caracteristica":
+            case "Característica":
                 switch(field)
                 {
                     case "system.valor":
@@ -143,7 +165,7 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
                         break;
                 }
                 break;
-            case "salvacion": 
+            case "Salvación": 
                 switch(field)
                 {
                   case "system.mod_clase":
@@ -156,7 +178,7 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
                 updated = this.document.items.get(item.id);
                 await updated.update({"system.mod":this.sumarSalvacion(updated)});
                 break;
-            case "habilidad":
+            case "Habilidad":
                 switch(field)
                 {
                   case "system.mod_otros":
@@ -176,6 +198,14 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
                     updated = this.document.items.get(item.id);
                     await updated.update({"system.mod":this.sumarHabilidad(updated)});
                 break;
+            case "Clase":
+                switch(field)
+                {
+                    case "system.nivel":
+                        await item.update({"system.nivel":parseInt(event.target.value) || 1});
+                    break;
+                }
+                break;
         }
 
           setTimeout(() => {
@@ -185,7 +215,7 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
 
     async actualizarHabilidades(item)
     {
-        let habilidades = this.document.items.filter(function(item){return (item.type=="habilidad")});
+        let habilidades = this.document.items.filter(function(item){return (item.type=="Habilidad")});
         
         for(const hab of habilidades)
         {   
@@ -206,7 +236,7 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
 
     async actualizarSalvaciones(item)
     {
-        let salvaciones = this.document.items.filter(function(item){return (item.type=="salvacion")});
+        let salvaciones = this.document.items.filter(function(item){return (item.type=="Salvación")});
         
         for(const salva of salvaciones)
         {   
@@ -247,7 +277,14 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
     async _onRollCarac(event) {
         event.preventDefault();
 
-        const element = event.currentTarget.closest(".item");
+        // Find the element with data-item-id (might be event.target itself or a parent)
+        const element = event.target.closest('[data-item-id]');
+        
+        if (!element) {
+            console.error("Could not find element with data-item-id");
+            return;
+        }
+
         const itemId = element.dataset.itemId;
         const item = this.document.items.get(itemId);
         
@@ -257,18 +294,19 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
         let mod = 0;
         switch(item.type)
         {
-            case "caracteristica":
+            case "Característica":
                 mod = Number(item.system?.mod_tmp ?? 0);
                 break;
-            case "salvacion","habilidad":
+            case "Salvación":
+            case "Habilidad":
                 mod = Number(item.system?.mod ?? 0);
-                if(item.type=="habilidad")
+                if(item.type=="Habilidad")
                 {
                     if(item.system.usa_descriptor)
                         label = label + " [" + item.system.descriptor + "]";
 
                 }
-                break
+                break;
         }
         
 
@@ -285,7 +323,78 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
             content: `<strong>${label}</strong>: 1d20 [${roll.dice[0].results[0].result}]${mod >= 0 ? "+" : ""}${mod} = <strong>${roll.total}</strong>`,
             sound: "sounds/dice.wav"
         });
+    }
+
+    async _onEditPortrait(event) {
+        event.preventDefault();
+        
+        // Open file picker to world directory - standard Foundry v13 behavior
+        const fp = new FilePicker({
+            type: "image",
+            callback: (imagePath) => {
+                this.document.update({ img: imagePath });
+            }
+        });
+        fp.browse();
+    }
+
+    async _onRemoveClass(event) {
+        event.preventDefault();
+        
+        // Try to get itemId from the button itself or its closest parent
+        const button = event.target.closest('[data-action="removeClass"]');
+        const itemId = button?.dataset.itemId;
+        
+        if (!itemId) {
+            console.error("No item ID found for class removal", event.target, event.currentTarget);
+            return;
         }
+        
+        const item = this.document.items.get(itemId);
+        if (!item) return;
+        
+        // Confirm deletion
+        const confirm = await Dialog.confirm({
+            title: "Confirmar Eliminación",
+            content: `¿Eliminar la clase "${item.name}"?`,
+            yes: () => true,
+            no: () => false
+        });
+        
+        if (confirm) {
+            await this.document.deleteEmbeddedDocuments("Item", [itemId]);
+            ui.notifications.info(`${item.name} eliminada`);
+        }
+    }
+
+    async _onRemoveRaza(event) {
+        event.preventDefault();
+        
+        // Try to get itemId from the button itself or its closest parent
+        const button = event.target.closest('[data-action="removeRaza"]');
+        const itemId = button?.dataset.itemId;
+        
+        if (!itemId) {
+            console.error("No item ID found for race removal", event.target, event.currentTarget);
+            return;
+        }
+        
+        const item = this.document.items.get(itemId);
+        if (!item) return;
+        
+        // Confirm deletion
+        const confirm = await Dialog.confirm({
+            title: "Confirmar Eliminación",
+            content: `¿Eliminar la raza "${item.name}"?`,
+            yes: () => true,
+            no: () => false
+        });
+        
+        if (confirm) {
+            await this.document.deleteEmbeddedDocuments("Item", [itemId]);
+            ui.notifications.info(`${item.name} eliminada`);
+        }
+    }
 
 
 }

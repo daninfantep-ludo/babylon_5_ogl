@@ -4,7 +4,7 @@
     "default": "PJ",
     "PJ":
     {
-      "nivel":1,
+      "ecl":0,
       "max_hp":0,
       "cur_hp":0,
       "dano_noletal":0,
@@ -16,9 +16,14 @@
     }
   },
   "Item": {
-    "types": ["item", "weapon", "habilidad","feat","caracteristica","raza","salvacion"],
-    "default": "item",
-    "raza":
+    "types": ["Objeto", "Arma", "Habilidad","Feat","Característica","Raza","Salvación","Clase"],
+    "default": "Objeto",
+    "Clase":
+    {
+      "nivel":0,
+      "html-text":""
+    },
+    "Raza":
     {
       "mod_fue":0,
       "mod_des":0,
@@ -26,9 +31,10 @@
       "mod_int":0,
       "mod_sab":0,
       "mod_car":0,
-      "fav_class":""      
+      "fav_class":""  ,
+      "html-text":""    
     },
-    "caracteristica":
+    "Característica":
     {
         "abrevia":"",
         "valor": 0,
@@ -36,7 +42,7 @@
         "valor_tmp":0,
         "mod_tmp":0        
     },
-    "habilidad":
+    "Habilidad":
     {
       "descriptor":"",
       "usa_descriptor":false,
@@ -49,7 +55,7 @@
       "pen_armadura":false,
       "mod":0
     },
-    "salvacion":
+    "Salvación":
     {
        "caracteristica":""
       ,"mod_clase":0
