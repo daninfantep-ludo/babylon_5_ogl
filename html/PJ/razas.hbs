@@ -1,10 +1,10 @@
 <div class="razas-section">
   <div class="razas-header" >Raza</div>
-
   <div class="razas-list">
     {{#if razas}}
       <div class="raza-item item" data-item-id="{{razas._id}}">
         <span class="raza-nombre">{{razas.name}}</span>
+        
         <button class="remove-raza" data-action="removeRaza" data-item-id="{{razas._id}}">✕</button>
       </div>
     {{else}}

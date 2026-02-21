@@ -1,4 +1,5 @@
-.babylon-sheet {
+/* Root application element - AppV2 */
+.babylon-.sheet.actor {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -7,6 +8,30 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.babylon-sheet {
+  display: flex;
+  flex-direction: column;
+  background: #2a2a2a;
+  color: #e0e0e0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  order: 1;
+}
+
+.babylon-.sheet.actor .sheet-header {
+  padding: 8px 10px;
+  border-bottom: 1px solid #444;
+  background: #1a1a1a;
+  height: auto;
+  min-height: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  flex: 0 0 auto;
 }
 
 .babylon-sheet .sheet-header {
@@ -37,6 +62,15 @@
 .profile-img:hover {
   opacity: 0.8;
   box-shadow: 0 0 12px rgba(0, 120, 212, 0.6);
+}
+
+.babylon-.sheet.actor .sheet-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .babylon-sheet .sheet-body {
@@ -137,7 +171,7 @@
   contain: layout style;
 }
 
-/* Tab styling */
+/* Tab styling - old custom tabs (kept for compatibility) */
 .sheet-tabs {
   display: flex;
   gap: 10px;
@@ -164,12 +198,95 @@
   border-color: #0078d4;
 }
 
+/* AppV2 Navigable Tabs - Foundry's generic tab navigation */
+.navigable-tabs,
+nav[class*="navigable-tabs"] {
+  display: flex !important;
+  gap: 4px;
+  border-bottom: 2px solid #444;
+  padding: 10px 10px 0 10px;
+  margin: 0;
+  flex-wrap: wrap;
+  background: #2a2a2a;
+  flex: 0 0 auto;
+  order: 2;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 100;
+}
+
+.navigable-tabs [role="tab"],
+nav[class*="navigable-tabs"] [role="tab"],
+.tab-button {
+  display: inline-flex !important;
+  padding: 8px 16px;
+  background: #3a3a3a;
+  border: 1px solid #555;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.95em;
+  margin: 0;
+  padding: 6px 14px;
+}
+
+.navigable-tabs [role="tab"]:hover,
+nav[class*="navigable-tabs"] [role="tab"]:hover,
+.tab-button:hover {
+  background: #4a4a4a;
+  color: #ccc;
+}
+
+.navigable-tabs [role="tab"][aria-selected="true"],
+nav[class*="navigable-tabs"] [role="tab"][aria-selected="true"],
+.tab-button[aria-selected="true"],
+.tab-button.active {
+  background: #0078d4;
+  color: white;
+  border-color: #0078d4;
+}
+
+/* Tab sections - hide by default */
+section.tab {
+  display: none !important;
+  flex: 0 0 auto;
+  overflow: hidden;
+  background: #2a2a2a;
+  order: 3;
+}
+
+/* Show only active tab and make it take remaining space */
+section.tab.active {
+  display: flex !important;
+  flex: 1;
+  flex-direction: column;
+  order: 3;
+}
+
+/* Tab content wrapper for scrolling */
+.tab-content {
+  overflow-y: auto;
+  flex: 1;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
 .tab {
   display: none !important;
 }
 
 .tab.active {
   display: block !important;
+}
+
+/* Override for AppV2 section tabs - these take precedence */
+section.tab.active {
+  display: flex !important;
 }
 
 /* Checkboxes sin focus visual */
@@ -182,6 +299,7 @@
     overflow-y: auto;
   max-height: 100%;
 }
+
 
 /* Fila 1 (celdas 6..12), Fila 3 (20..26), Fila 5 (34..40)... */
 .habilidades-grid > div:nth-child(14n+6),
@@ -320,6 +438,7 @@ button[data-action="removeClass"]:active {
 
 /* Races Section Styling */
 .razas-section {
+  margin-top: 6px;
   display: flex;
   gap: 12px;
   align-items: center;

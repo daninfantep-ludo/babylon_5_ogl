@@ -9,48 +9,25 @@
            data-action="editPortrait"
            width="80" height="80" 
            style="display: block; border: 1px solid #ccc; border-radius: 4px;"/>
-      
     </div>
     
     <div class="header-fields" style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start; padding: 0;">      
       <input name="name" type="text" value="{{document.name}}" placeholder="Nombre del personaje" style="font-size: 1em; padding: 4px; margin: 0; margin-bottom: 4px;"/>
-      <div style="display: flex; gap: 16px;">
+      <div style="display: flex; gap: 16px; align-items: center;">
         {{> "systems/babylon_5_ogl/html/PJ/clases.hbs"}}
         {{> "systems/babylon_5_ogl/html/PJ/razas.hbs"}}
       </div>
     </div>
   </header>
-  <div style="display:grid; gap:4px;">
+
+  <!-- Characteristics and Savings sections -->
+  <div style="display:grid; gap:4px; margin: 4px 0; flex: 0 0 auto;">
     <div style=" grid-column:1;">
       {{> "systems/babylon_5_ogl/html/PJ/caracteristicas.hbs"}}
-
     </div>
     
     <div style="grid-column:2;">
       {{> "systems/babylon_5_ogl/html/PJ/salvaciones.hbs"}}
     </div>    
-  </div>
-
-  <!-- Contenido pegado arriba-izquierda -->
-  <div class="sheet-body" style="flex: 1; display: flex; flex-direction: column; padding: 10px; box-sizing: border-box;">
-    <nav class="sheet-tabs" data-group="primary" style="border-bottom: 1px solid #444; margin-bottom: 10px;">
-      <a class="item" data-tab="habilidades"><strong>Habilidades</strong></a>
-      <a class="item" data-tab="combate"><strong>Combate</strong></a>
-      <a class="item" data-tab="equipo"><strong>Equipo</strong></a>
-      <a class="item" data-tab="notas"><strong>Notas</strong></a>
-    </nav>
-
-    <div class="tab skills habs-scroll" data-group="primary" data-tab="habilidades" style="flex: 1; overflow-y: auto;">
-      {{> "systems/babylon_5_ogl/html/PJ/habilidades.hbs"}}                    
-    </div>
-    <div class="tab" data-group="primary" data-tab="combate" style="flex: 1; overflow-y: auto;">
-      <h3>Combate</h3>
-    </div>
-    <div class="tab" data-group="primary" data-tab="equipo" style="flex: 1; overflow-y: auto;">
-      <h3>Equipo</h3>
-    </div>
-    <div class="tab" data-group="primary" data-tab="notas" style="flex: 1; overflow-y: auto;">
-      <h3>Notas</h3>
-    </div>
   </div>
 </div>

@@ -24,15 +24,45 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
     };
 
     static PARTS = {
-        sheet: {
-            template: "systems/babylon_5_ogl/html/babylon_5_ogl_PJ.hbs",
-            scrollable: [".habs-scroll"]
+        header: {
+            template: "systems/babylon_5_ogl/html/babylon_5_ogl_PJ.hbs"
+        },
+        tabs: {
+            template: "systems/babylon_5_ogl/html/PJ/tabs_navigation.hbs"
+        },
+        habilidades: {
+            template: "systems/babylon_5_ogl/html/PJ/habilidades_tab.hbs",
+            scrollable: [""]
+        },
+        combate: {
+            template: "systems/babylon_5_ogl/html/PJ/combate_tab.hbs",
+            scrollable: [""]
+        },
+        equipo: {
+            template: "systems/babylon_5_ogl/html/PJ/equipo_tab.hbs",
+            scrollable: [""]
+        },
+        notas: {
+            template: "systems/babylon_5_ogl/html/PJ/notas_tab.hbs",
+            scrollable: [""]
+        }
+    };
+
+    static TABS = {
+        primary: {
+            tabs: [
+                { id: "habilidades", label: "Habilidades" },
+                { id: "combate", label: "Combate" },
+                { id: "equipo", label: "Equipo" },
+                { id: "notas", label: "Notas" }
+            ],
+            initial: "habilidades"
         }
     };
 
     // Get the correct template path based on actor type
     _getPartTemplate(partId) {
-        if (partId === "sheet") {
+        if (partId === "header") {
             const templatePath = `systems/babylon_5_ogl/html/babylon_5_ogl_${this.document.type}.hbs`;
             console.log("Loading template:", templatePath);
             return templatePath;
@@ -57,6 +87,9 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
             default: 
                 this.options.position.height = 890;
         }
+
+        // Prepare tabs
+        context.tabs = this._prepareTabs("primary");
         
         return context;
     }
@@ -64,37 +97,45 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
     async _preparePartContext(partId, context, options) {
         context = await super._preparePartContext(partId, context, options);
         
-        // Prepare context for the sheet part
-        if (partId === "sheet") {
-            context.config = CONFIG.babylon_5_ogl;
-            context.system = this.document.system;
-            
-            // Filter and sort caracteristicas in the order declared in createActor hook
-            const caracOrder = ["FUE", "DES", "CON", "INT", "SAB", "CAR"];
-            context.caracteristicas = this.document.items
-                .filter(item => item.type === "Característica")
-                .sort((a, b) => caracOrder.indexOf(a.system.abrevia) - caracOrder.indexOf(b.system.abrevia));
-            
-            context.habilidades = this.document.items.filter(item => item.type === "Habilidad");
-            
-            // Sort salvaciones in the order declared in createActor hook
-            const salvOrder = ["CON", "DES", "SAB"];
-            context.salvaciones = this.document.items
-                .filter(item => item.type === "Salvación")
-                .sort((a, b) => salvOrder.indexOf(a.system.caracteristica) - salvOrder.indexOf(b.system.caracteristica));
-            
-            // Get classes (Clase items)
-            context.clases = this.document.items.filter(item => item.type === "Clase");
-            
-            // Calculate ECL (Effective Class Level) as sum of all clase niveles
-            context.ecl = context.clases.reduce((total, clase) => total + (parseInt(clase.system.nivel) || 0), 0);
-            
-            // Get race (Raza item) - typically only one
-            const razaItems = this.document.items.filter(item => item.type === "Raza");
-            context.razas = razaItems.length > 0 ? razaItems[0] : null;
-            
-            context.type = this.document.type;
-            context.flags = this.document.flags;
+        // Common data for all parts
+        context.config = CONFIG.babylon_5_ogl;
+        context.system = this.document.system;
+        context.type = this.document.type;
+        context.flags = this.document.flags;
+        
+        // Filter and sort caracteristicas
+        const caracOrder = ["FUE", "DES", "CON", "INT", "SAB", "CAR"];
+        context.caracteristicas = this.document.items
+            .filter(item => item.type === "Característica")
+            .sort((a, b) => caracOrder.indexOf(a.system.abrevia) - caracOrder.indexOf(b.system.abrevia));
+        
+        // Get habilidades
+        context.habilidades = this.document.items.filter(item => item.type === "Habilidad");
+        
+        // Sort salvaciones
+        const salvOrder = ["CON", "DES", "SAB"];
+        context.salvaciones = this.document.items
+            .filter(item => item.type === "Salvación")
+            .sort((a, b) => salvOrder.indexOf(a.system.caracteristica) - salvOrder.indexOf(b.system.caracteristica));
+        
+        // Get classes
+        context.clases = this.document.items.filter(item => item.type === "Clase");
+        
+        // Calculate ECL
+        context.ecl = context.clases.reduce((total, clase) => total + (parseInt(clase.system.nivel) || 0), 0);
+        
+        // Get race
+        const razaItems = this.document.items.filter(item => item.type === "Raza");
+        context.razas = razaItems.length > 0 ? razaItems[0] : null;
+        
+        // Ensure tabs are available for all parts
+        if (!context.tabs) {
+            context.tabs = this._prepareTabs("primary");
+        }
+        
+        // Set tab context if this is a tab part
+        if (["habilidades", "combate", "equipo", "notas"].includes(partId)) {
+            context.tab = context.tabs[partId];
         }
         
         return context;
@@ -103,16 +144,42 @@ export default class babylon_5_ogl_hojaPersonaje extends foundry.applications.ap
     _onRender(context, options) {
         super._onRender(context, options);
         
-        // Add event listeners
+        // Add event listeners for tab buttons
+        this.element.querySelectorAll(".tab-button").forEach(button => {
+            button.addEventListener("click", (event) => {
+                event.preventDefault();
+                const tabId = button.dataset.tab;
+                const groupId = button.dataset.group || "primary";
+                
+                if (tabId) {
+                    // Hide all tabs in this group
+                    this.element.querySelectorAll(`section.tab[data-group="${groupId}"]`).forEach(tab => {
+                        tab.classList.remove("active");
+                    });
+                    
+                    // Deselect all buttons in this group
+                    this.element.querySelectorAll(`.tab-button[data-group="${groupId}"]`).forEach(btn => {
+                        btn.classList.remove("active");
+                        btn.setAttribute("aria-selected", "false");
+                    });
+                    
+                    // Show selected tab
+                    const selectedTab = this.element.querySelector(`section.tab[data-tab="${tabId}"][data-group="${groupId}"]`);
+                    if (selectedTab) {
+                        selectedTab.classList.add("active");
+                    }
+                    
+                    // Select the clicked button
+                    button.classList.add("active");
+                    button.setAttribute("aria-selected", "true");
+                }
+            });
+        });
+        
+        // Add event listeners for form inputs
         this.element.querySelectorAll(".change").forEach(el => {
             el.addEventListener("change", this._onTextChange.bind(this));
         });
-
-        /*
-        this.element.querySelectorAll(".chkClick").forEach(el => {
-            el.addEventListener("click", this._chkClick.bind(this));
-        });*/
-        // Redundante porque se usa el actions de las default options para las interacciones de click
     }
 
     _chkClick(event)
